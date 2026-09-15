@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ONEND Boxing Club</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Work+Sans:wght@400;500;600;700&family=Playfair+Display:ital@1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="site-header__inner">
+    <a href="#top" class="logo">ONEND</a>
+
+    <input type="checkbox" id="nav-toggle" class="nav-toggle">
+    <label for="nav-toggle" class="hamburger" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </label>
+
+    <nav class="main-nav">
+      <ul>
+        <li><a href="#club">Club</a></li>
+        <li><a href="#training">Training</a></li>
+        <li><a href="#schedule">Schedule</a></li>
+        <li><a href="#coaches">Coaches</a></li>
+        <li><a href="#join" class="main-nav__cta">Join</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+  <section class="hero">
+    <div class="brand-mark">
+      <span class="brand-mark__the">the</span>
+      <div class="brand-mark__name">
+        <span>On</span>
+        <img class="brand-mark__icon" src="img/glove-mark.png" alt="">
+        <span>End</span>
+      </div>
+      <span class="brand-mark__sub">boxing club</span>
+      <span class="brand-mark__since">since 2014</span>
+    </div>
+
+    <p class="hero__tagline">Stripping the intimidation out of the gym floor to<br>
+      build a boxing community open to everyone.</p>
+  </section>
+
+  <section class="club" id="club">
+    <div class="club__text">
+      <h2>The Club</h2>
+      <p>Real coaching, no ego at the door. Ironclad exists to make boxing
+        feel like it belongs to everyone who walks in — from a first jab
+        to a first fight.</p>
+    </div>
+
+    <img class="club__photo-a" src="img/Spar.jpg" alt="Ring floor at Ironclad">
+
+    <img class="club__photo-b" src="img/gym.jpg" alt="Morning training session">
+
+    <img class="club__mark" src="img/glove-mark.png" alt="">
+
+  </section>
+
+  <section class="training" id="training">
+
+    <img class="training__photo" src="img/round.jpg" alt="Heavy bags at Ironclad">
+
+    <div class="training__body">
+      <h2 class="section-title">Training</h2>
+      <p class="section-lead">Four rounds, one path — from your first jab to your first sparring session.</p>
+
+      <div class="training__grid">
+        <article class="class-card">
+          <span class="class-card__round">Round 01</span>
+          <h3>Boxing School</h3>
+          <p>Stance, footwork, first punches. No experience needed.</p>
+        </article>
+        <article class="class-card">
+          <span class="class-card__round">Round 02</span>
+          <h3>Technique &amp; Pads</h3>
+          <p>One-on-one pad work, combinations, breathing.</p>
+        </article>
+        <article class="class-card">
+          <span class="class-card__round">Round 03</span>
+          <h3>Conditioning</h3>
+          <p>Bag intervals, rope, core — built for the long round.</p>
+        </article>
+        <article class="class-card">
+          <span class="class-card__round">Round 04</span>
+          <h3>Sparring</h3>
+          <p>Controlled pairs work, coach-supervised, by approval.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="schedule" id="schedule">
+    <h2 class="section-title">Schedule</h2>
+    <div class="schedule__layout">
+      <div class="schedule__table-wrap">
+        <table class="schedule__table">
+          <thead>
+            <tr>
+              <th scope="col">Day</th>
+              <th scope="col">School</th>
+              <th scope="col">Pads</th>
+              <th scope="col">Sparring</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">Mon / Wed / Fri</th>
+              <td>19:00</td>
+              <td>20:15</td>
+              <td>—</td>
+            </tr>
+            <tr>
+              <th scope="row">Tue / Thu</th>
+              <td>—</td>
+              <td>19:00</td>
+              <td>20:30</td>
+            </tr>
+            <tr>
+              <th scope="row">Saturday</th>
+              <td>11:00</td>
+              <td>12:15</td>
+              <td>13:30</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <img class="schedule__photo" src="img/round_timer.jpg" alt="Coach timing a round">
+    </div>
+  </section>
+
+  <section class="coaches" id="coaches">
+    <h2 class="section-title">Coaches</h2>
+    <div class="coaches__grid">
+      <article class="coach-card">
+        <img class="coach-card__photo" src="img/bivol.jpeg" alt="Coach Bivol">
+        <h3>Dmitri Bivol</h3>
+        <p class="coach-card__role">Head Coach</p>
+      </article>
+      <article class="coach-card">
+        <img class="coach-card__photo" src="img/habib.JPG" alt="Coach Nurmagomedov">
+        <h3>Habib Nurmagomedov</h3>
+        <p class="coach-card__role">Boxing School</p>
+      </article>
+      <article class="coach-card">
+        <img class="coach-card__photo" src="img/coach_den.png" alt="Coach Ton Fire">
+        <h3>Ton Fire</h3>
+        <p class="coach-card__role">Conditioning</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="membership" id="membership">
+    <h2 class="section-title">Membership</h2>
+    <div class="membership__grid">
+      <article class="plan-card">
+        <h3>Drop-in</h3>
+        <p class="plan-card__price">15&nbsp;BYN</p>
+        <ul>
+          <li>Single class</li>
+          <li>Gear included</li>
+        </ul>
+        <a href="#join" class="btn btn--ghost">Join</a>
+      </article>
+      <article class="plan-card plan-card--highlight">
+        <p class="plan-card__badge">Popular</p>
+        <h3>8 classes</h3>
+        <p class="plan-card__price">90&nbsp;BYN</p>
+        <ul>
+          <li>Valid 30 days</li>
+          <li>Any class on schedule</li>
+        </ul>
+        <a href="#join" class="btn btn--primary">Join</a>
+      </article>
+      <article class="plan-card">
+        <h3>Unlimited</h3>
+        <p class="plan-card__price">150&nbsp;BYN</p>
+        <ul>
+          <li>No limits, one month</li>
+          <li>Sparring group priority</li>
+        </ul>
+        <a href="#join" class="btn btn--ghost">Join</a>
+      </article>
+    </div>
+  </section>
+
+  <section class="join" id="join">
+    <div class="join__intro">
+      <h2>Become a Member</h2>
+      <p>Join OnEnd Boxing Club and become part of a community built
+        on discipline, respect and real coaching — open to everyone,
+        first round free.</p>
+    </div>
+
+    <img class="join__photo" src="img/gloves.jpg" alt="Ironclad club entrance">
+
+    <form class="join__form" action="#" novalidate>
+      <div class="form-field">
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" placeholder="Your name" required>
+      </div>
+      <div class="form-field">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" placeholder="you@example.com" required>
+      </div>
+      <div class="form-field">
+        <label for="message">Message</label>
+        <textarea id="message" name="message" rows="4" placeholder="Experience, preferred time"></textarea>
+      </div>
+      <button type="submit" class="btn btn--primary btn--block">Send request</button>
+    </form>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="site-footer__inner">
+    <a href="#top" class="logo logo--footer">OnEnd</a>
+    <ul class="site-footer__nav">
+      <li><a href="#club">Club</a></li>
+      <li><a href="#training">Training</a></li>
+      <li><a href="#schedule">Schedule</a></li>
+      <li><a href="#join">Join</a></li>
+    </ul>
+    <p class="site-footer__copy">© 2026 OnEnd Boxing Club, Minsk</p>
+  </div>
+</footer>
+
+</body>
+</html>
