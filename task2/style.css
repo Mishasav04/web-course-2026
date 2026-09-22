@@ -152,7 +152,7 @@ p { margin: 0 0 1em; }
   text-transform: uppercase;
   letter-spacing: 0.06em;
 }
-.brand-mark__icon { width: 1.4em; height: 1.4em; color: var(--red); }
+.brand-mark__icon { width: 1.8em; height: 1.8em; color: var(--red); }
 .brand-mark__sub {
   display: block;
   font-family: var(--font-script);
@@ -197,8 +197,8 @@ p { margin: 0 0 1em; }
 
 .club__mark {
   grid-area: mark;
-  width: 84px;
-  height: 84px;
+  width: 150px;
+  height: 150px;
   color: var(--red);
   justify-self: center;
   align-self: center;
