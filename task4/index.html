@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Быки и коровы</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<main class="app">
+  <h1>Быки и коровы</h1>
+
+  <form id="guess-form" class="guess-form">
+    <input type="text" id="guess-input" maxlength="4" placeholder="4 цифры" autocomplete="off">
+    <button type="submit">Проверить</button>
+  </form>
+
+  <p id="error" class="error"></p>
+  <p id="win-message" class="win-message"></p>
+
+  <p id="attempt-count" class="attempt-count"></p>
+
+  <ul id="history-list" class="history-list"></ul>
+
+  <button id="new-game-btn" type="button" class="new-game-btn">Новая игра</button>
+</main>
+
+<script src="script.js" defer></script>
+</body>
+</html>
