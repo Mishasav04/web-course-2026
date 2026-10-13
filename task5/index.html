@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simon</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<main class="app">
+  <h1>Simon</h1>
+
+  <p id="level-display" class="level-display">Уровень: 0</p>
+  <p id="message" class="message">Нажмите «Старт», чтобы начать</p>
+
+  <div class="board">
+    <button type="button" class="pad pad--0" data-index="0"></button>
+    <button type="button" class="pad pad--1" data-index="1"></button>
+    <button type="button" class="pad pad--2" data-index="2"></button>
+    <button type="button" class="pad pad--3" data-index="3"></button>
+  </div>
+
+  <button id="start-btn" type="button" class="start-btn">Старт</button>
+</main>
+
+<script src="script.js" defer></script>
+</body>
+</html>
