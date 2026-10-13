@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Змейка</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<main class="app">
+  <h1>Змейка</h1>
+  <p id="score" class="score">Счёт: 0</p>
+
+  <div class="canvas-wrap">
+    <canvas id="game-canvas" width="400" height="400"></canvas>
+
+    <div id="game-over" class="game-over hidden">
+      <p class="game-over__title">Игра окончена</p>
+      <p class="game-over__score">Счёт: <span id="final-score">0</span></p>
+      <button id="restart-btn" type="button">Начать заново</button>
+    </div>
+  </div>
+</main>
+
+<script src="script.js" defer></script>
+</body>
+</html>
