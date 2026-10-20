@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Лента постов</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="header">
+    <div class="container">
+      <div class="header__top">
+        <h1 class="header__title">Лента постов</h1>
+        <p id="counter" class="header__counter">Загружено: 0</p>
+      </div>
+
+      <label class="search" for="search-input">
+        <span class="visually-hidden">Поиск по заголовку</span>
+        <svg class="search__icon" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="11" cy="11" r="7" />
+          <line x1="16.5" y1="16.5" x2="21" y2="21" />
+        </svg>
+        <input
+          id="search-input"
+          class="search__input"
+          type="search"
+          placeholder="Поиск по заголовку, например: qui est esse"
+          autocomplete="off"
+        >
+      </label>
+    </div>
+  </header>
+
+  <main class="container">
+    <ul id="posts-list" class="posts"></ul>
+
+    <div class="status" aria-live="polite">
+      <div id="loader" class="loader hidden">
+        <span class="loader__spinner"></span>
+        <span>Загрузка…</span>
+      </div>
+
+      <div id="error" class="error hidden">
+        <p id="error-text" class="error__text"></p>
+        <button id="retry-btn" class="error__btn" type="button">Повторить</button>
+      </div>
+
+      <p id="message" class="message hidden"></p>
+    </div>
+
+    <div id="sentinel" class="sentinel"></div>
+  </main>
+
+  <script src="script.js" defer></script>
+</body>
+</html>
