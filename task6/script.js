@@ -1,224 +1,260 @@
-(function () {
+(() => {
   'use strict';
 
-  const GRID_SIZE = 20;
-  const CELL_SIZE = 20;
-  const MOVE_INTERVAL_MS = 150;
+  class SnakeModel {
+    #gridSize;
+    #segments = [];
+    #direction = { x: 1, y: 0 };
+    #pendingDirection = { x: 1, y: 0 };
+    #apple = null;
+    #score = 0;
+    #gameOver = false;
 
-  const KEY_TO_DIRECTION = {
-    ArrowUp: { x: 0, y: -1 },
-    ArrowDown: { x: 0, y: 1 },
-    ArrowLeft: { x: -1, y: 0 },
-    ArrowRight: { x: 1, y: 0 },
-  };
+    constructor(gridSize) {
+      this.#gridSize = gridSize;
+    }
 
-  // ---------- MODEL ----------
-  // Состояние игры лежит здесь, отдельно от отрисовки.
-  const model = {
-    segments: [],
-    direction: { x: 1, y: 0 },
-    pendingDirection: { x: 1, y: 0 },
-    apple: { x: 0, y: 0 },
-    score: 0,
-    gameOver: false,
-  };
-
-  function resetModel() {
-    model.segments = [
-      { x: 8, y: 10 },
-      { x: 7, y: 10 },
-      { x: 6, y: 10 },
-    ];
-    model.direction = { x: 1, y: 0 };
-    model.pendingDirection = { x: 1, y: 0 };
-    model.score = 0;
-    model.gameOver = false;
-    model.apple = spawnApple();
-  }
-
-  function isOccupiedBySnake(point) {
-    return model.segments.some(
-      (segment) => segment.x === point.x && segment.y === point.y
-    );
-  }
-
-  function isOutsideField(point) {
-    return (
-      point.x < 0 ||
-      point.y < 0 ||
-      point.x >= GRID_SIZE ||
-      point.y >= GRID_SIZE
-    );
-  }
-
-  function spawnApple() {
-    let candidate;
-    do {
-      candidate = {
-        x: Math.floor(Math.random() * GRID_SIZE),
-        y: Math.floor(Math.random() * GRID_SIZE),
+    getState() {
+      return {
+        segments: this.#segments.map((s) => ({ ...s })),
+        apple: this.#apple ? { ...this.#apple } : null,
+        score: this.#score,
+        gameOver: this.#gameOver,
       };
-    } while (isOccupiedBySnake(candidate));
-    return candidate;
+    }
+
+    reset() {
+      const mid = Math.floor(this.#gridSize / 2);
+      this.#segments = [
+        { x: mid - 2, y: mid },
+        { x: mid - 3, y: mid },
+        { x: mid - 4, y: mid },
+      ];
+      this.#direction = { x: 1, y: 0 };
+      this.#pendingDirection = { x: 1, y: 0 };
+      this.#score = 0;
+      this.#gameOver = false;
+      this.#apple = this.#spawnApple();
+    }
+
+    setDirection(dx, dy) {
+      const isOpposite = this.#direction.x === -dx && this.#direction.y === -dy;
+      if (!isOpposite) this.#pendingDirection = { x: dx, y: dy };
+    }
+
+    update() {
+      if (this.#gameOver) return;
+      this.#moveSnake();
+    }
+
+    #moveSnake() {
+      this.#direction = this.#pendingDirection;
+      const head = this.#segments[0];
+      const nextHead = {
+        x: head.x + this.#direction.x,
+        y: head.y + this.#direction.y,
+      };
+
+      const ateApple = this.#apple !== null && this.#isSamePoint(nextHead, this.#apple);
+
+      if (this.#checkCollision(nextHead, ateApple)) {
+        this.#gameOver = true;
+        return;
+      }
+
+      this.#segments.unshift(nextHead);
+
+      if (ateApple) {
+        this.#score += 1;
+        this.#apple = this.#spawnApple();
+        if (this.#apple === null) this.#gameOver = true; 
+      } else {
+        this.#segments.pop();
+      }
+    }
+
+    #checkCollision(point, ateApple) {
+      const body = ateApple ? this.#segments : this.#segments.slice(0, -1);
+      return this.#isOutsideField(point) || body.some((s) => this.#isSamePoint(s, point));
+    }
+
+    #spawnApple() {
+      const freeCells = [];
+      for (let y = 0; y < this.#gridSize; y++) {
+        for (let x = 0; x < this.#gridSize; x++) {
+          const cell = { x, y };
+          if (!this.#segments.some((s) => this.#isSamePoint(s, cell))) freeCells.push(cell);
+        }
+      }
+      if (freeCells.length === 0) return null;
+      return freeCells[Math.floor(Math.random() * freeCells.length)];
+    }
+
+    #isOutsideField({ x, y }) {
+      return x < 0 || y < 0 || x >= this.#gridSize || y >= this.#gridSize;
+    }
+
+    #isSamePoint(a, b) {
+      return a.x === b.x && a.y === b.y;
+    }
   }
 
-  function checkCollision(point) {
-    return isOutsideField(point) || isOccupiedBySnake(point);
+  class SnakeView {
+    #canvas;
+    #ctx;
+    #scoreEl;
+    #gameOverEl;
+    #finalScoreEl;
+    #restartBtn;
+    #cellSize;
+    #colors;
+
+    constructor(elements, { cellSize, colors }) {
+      this.#canvas = elements.canvas;
+      this.#ctx = elements.canvas.getContext('2d');
+      this.#scoreEl = elements.scoreEl;
+      this.#gameOverEl = elements.gameOverEl;
+      this.#finalScoreEl = elements.finalScoreEl;
+      this.#restartBtn = elements.restartBtn;
+      this.#cellSize = cellSize;
+      this.#colors = colors;
+    }
+
+    bindKeyDown(handler) {
+      document.addEventListener('keydown', (event) => {
+        if (handler(event.key)) event.preventDefault();
+      });
+    }
+
+    bindRestart(handler) {
+      this.#restartBtn.addEventListener('click', handler);
+    }
+
+    draw(state) {
+      this.#drawBackground();
+      if (state.apple) this.#drawApple(state.apple);
+      this.#drawSnake(state.segments);
+      this.#renderScore(state.score);
+      this.#renderGameOver(state.gameOver, state.score);
+    }
+
+    #drawBackground() {
+      this.#ctx.fillStyle = this.#colors.background;
+      this.#ctx.fillRect(0, 0, this.#canvas.width, this.#canvas.height);
+    }
+
+    #drawSnake(segments) {
+      const size = this.#cellSize;
+      segments.forEach((segment, index) => {
+        this.#ctx.fillStyle = index === 0 ? this.#colors.head : this.#colors.body;
+        this.#ctx.fillRect(segment.x * size, segment.y * size, size - 1, size - 1);
+      });
+    }
+
+    #drawApple({ x, y }) {
+      const size = this.#cellSize;
+      this.#ctx.fillStyle = this.#colors.apple;
+      this.#ctx.beginPath();
+      this.#ctx.arc(x * size + size / 2, y * size + size / 2, size / 2 - 1, 0, Math.PI * 2);
+      this.#ctx.fill();
+    }
+
+    #renderScore(score) {
+      this.#scoreEl.textContent = `Счёт: ${score}`;
+    }
+
+    #renderGameOver(isGameOver, score) {
+      this.#finalScoreEl.textContent = String(score);
+      this.#gameOverEl.classList.toggle('hidden', !isGameOver);
+    }
   }
 
-  function moveSnake() {
-    model.direction = model.pendingDirection;
-    const head = model.segments[0];
-    const nextHead = {
-      x: head.x + model.direction.x,
-      y: head.y + model.direction.y,
+ 
+  class SnakeController {
+    static #KEY_TO_DIRECTION = Object.freeze({
+      ArrowUp: { x: 0, y: -1 },
+      ArrowDown: { x: 0, y: 1 },
+      ArrowLeft: { x: -1, y: 0 },
+      ArrowRight: { x: 1, y: 0 },
+    });
+
+    #model;
+    #view;
+    #moveIntervalMs;
+    #lastMoveTime = null;
+    #frameId = null;
+
+    constructor(model, view, { moveIntervalMs }) {
+      this.#model = model;
+      this.#view = view;
+      this.#moveIntervalMs = moveIntervalMs;
+
+      this.#view.bindKeyDown((key) => this.#handleKeyDown(key));
+      this.#view.bindRestart(() => this.start());
+    }
+
+    start() {
+      this.#stopLoop();
+      this.#model.reset();
+      this.#lastMoveTime = null;
+      this.#view.draw(this.#model.getState());
+      this.#frameId = requestAnimationFrame(this.#gameLoop);
+    }
+
+    #handleKeyDown(key) {
+      const direction = SnakeController.#KEY_TO_DIRECTION[key];
+      if (!direction) return false;
+      this.#model.setDirection(direction.x, direction.y);
+      return true;
+    }
+
+    #gameLoop = (currentTime) => {
+      if (this.#lastMoveTime === null) this.#lastMoveTime = currentTime;
+
+      const deltaTime = currentTime - this.#lastMoveTime;
+      if (deltaTime >= this.#moveIntervalMs) {
+        this.#model.update();
+        this.#lastMoveTime += this.#moveIntervalMs;
+        if (currentTime - this.#lastMoveTime >= this.#moveIntervalMs) {
+          this.#lastMoveTime = currentTime;
+        }
+      }
+
+      const state = this.#model.getState();
+      this.#view.draw(state);
+
+      this.#frameId = state.gameOver ? null : requestAnimationFrame(this.#gameLoop);
     };
 
-    if (checkCollision(nextHead)) {
-      model.gameOver = true;
-      return;
-    }
-
-    model.segments.unshift(nextHead);
-
-    const ateApple = nextHead.x === model.apple.x && nextHead.y === model.apple.y;
-    if (ateApple) {
-      model.score += 1;
-      model.apple = spawnApple();
-    } else {
-      model.segments.pop();
+    #stopLoop() {
+      if (this.#frameId !== null) cancelAnimationFrame(this.#frameId);
+      this.#frameId = null;
     }
   }
 
-  function setDirection(dx, dy) {
-    const isOpposite = model.direction.x === -dx && model.direction.y === -dy;
-    if (isOpposite) return;
-    model.pendingDirection = { x: dx, y: dy };
-  }
+  const config = Object.freeze({
+    gridSize: 20,
+    cellSize: 20,
+    moveIntervalMs: 150,
+    colors: Object.freeze({
+      background: '#1b1f27',
+      head: '#4ade80',
+      body: '#22c55e',
+      apple: '#ef4444',
+    }),
+  });
 
-  function update() {
-    if (model.gameOver) return;
-    moveSnake();
-  }
-
-  // ---------- VIEW ----------
-  // Только отрисовка текущего состояния модели, без изменения состояния.
-  const view = {
-    canvas: null,
-    ctx: null,
-    scoreEl: null,
-    gameOverEl: null,
-    finalScoreEl: null,
-  };
-
-  function initView() {
-    view.canvas = document.getElementById('game-canvas');
-    view.ctx = view.canvas.getContext('2d');
-    view.scoreEl = document.getElementById('score');
-    view.gameOverEl = document.getElementById('game-over');
-    view.finalScoreEl = document.getElementById('final-score');
-  }
-
-  function drawBackground() {
-    view.ctx.fillStyle = '#1b1f27';
-    view.ctx.fillRect(0, 0, view.canvas.width, view.canvas.height);
-  }
-
-  function drawSnake() {
-    model.segments.forEach((segment, index) => {
-      view.ctx.fillStyle = index === 0 ? '#4ade80' : '#22c55e';
-      view.ctx.fillRect(
-        segment.x * CELL_SIZE,
-        segment.y * CELL_SIZE,
-        CELL_SIZE - 1,
-        CELL_SIZE - 1
-      );
-    });
-  }
-
-  function drawApple() {
-    const centerX = model.apple.x * CELL_SIZE + CELL_SIZE / 2;
-    const centerY = model.apple.y * CELL_SIZE + CELL_SIZE / 2;
-
-    view.ctx.fillStyle = '#ef4444';
-    view.ctx.beginPath();
-    view.ctx.arc(centerX, centerY, CELL_SIZE / 2 - 1, 0, Math.PI * 2);
-    view.ctx.fill();
-  }
-
-  function renderScore() {
-    view.scoreEl.textContent = `Счёт: ${model.score}`;
-  }
-
-  function renderGameOver() {
-    if (model.gameOver) {
-      view.finalScoreEl.textContent = String(model.score);
-      view.gameOverEl.classList.remove('hidden');
-    } else {
-      view.gameOverEl.classList.add('hidden');
-    }
-  }
-
-  function draw() {
-    drawBackground();
-    drawApple();
-    drawSnake();
-    renderScore();
-    renderGameOver();
-  }
-
-  // ---------- CONTROLLER ----------
-  // Игровой цикл на requestAnimationFrame, клавиатура, запуск/перезапуск.
-  const controller = {
-    lastMoveTime: 0,
-    animationFrameId: null,
-  };
-
-  function handleKeyDown(event) {
-    const direction = KEY_TO_DIRECTION[event.key];
-    if (!direction) return;
-
-    event.preventDefault();
-    setDirection(direction.x, direction.y);
-  }
-
-  function gameLoop(currentTime) {
-    if (controller.lastMoveTime === 0) {
-      controller.lastMoveTime = currentTime;
-    }
-
-    const elapsed = currentTime - controller.lastMoveTime;
-    if (elapsed >= MOVE_INTERVAL_MS) {
-      update();
-      controller.lastMoveTime = currentTime;
-    }
-
-    draw();
-
-    if (model.gameOver) {
-      controller.animationFrameId = null;
-      return;
-    }
-
-    controller.animationFrameId = requestAnimationFrame(gameLoop);
-  }
-
-  function startGame() {
-    resetModel();
-    controller.lastMoveTime = 0;
-
-    if (controller.animationFrameId !== null) {
-      cancelAnimationFrame(controller.animationFrameId);
-    }
-    controller.animationFrameId = requestAnimationFrame(gameLoop);
-  }
-
-  function init() {
-    initView();
-    document.addEventListener('keydown', handleKeyDown);
-    document.getElementById('restart-btn').addEventListener('click', startGame);
-    startGame();
-  }
-
-  init();
+  const model = new SnakeModel(config.gridSize);
+  const view = new SnakeView(
+    {
+      canvas: document.getElementById('game-canvas'),
+      scoreEl: document.getElementById('score'),
+      gameOverEl: document.getElementById('game-over'),
+      finalScoreEl: document.getElementById('final-score'),
+      restartBtn: document.getElementById('restart-btn'),
+    },
+    config
+  );
+  const controller = new SnakeController(model, view, config);
+  controller.start();
 })();

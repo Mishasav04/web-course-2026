@@ -1,4 +1,6 @@
-* { box-sizing: border-box; }
+* {
+  box-sizing: border-box;
+}
 
 body {
   margin: 0;
@@ -6,76 +8,79 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #0f1115;
-  color: #eee;
-  font-family: Arial, sans-serif;
+  background: #0f1117;
+  color: #e5e7eb;
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 }
 
-.app {
-  text-align: center;
+.game {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
 }
 
-h1 {
-  margin: 0 0 8px;
+.game__title {
+  margin: 0;
+  font-size: 28px;
 }
 
-.score {
-  margin: 0 0 16px;
-  font-size: 1.1rem;
-  font-weight: bold;
+.game__score {
+  font-size: 18px;
+  font-weight: 600;
 }
 
-.canvas-wrap {
+.game__field {
   position: relative;
-  display: inline-block;
 }
 
 #game-canvas {
   display: block;
-  border: 2px solid #333;
-  border-radius: 4px;
+  border: 2px solid #2d3340;
+  border-radius: 6px;
+}
+
+.game__hint {
+  margin: 0;
+  font-size: 14px;
+  color: #9ca3af;
 }
 
 .game-over {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  background: rgba(15, 17, 21, 0.85);
-  border-radius: 4px;
-}
-
-.game-over.hidden {
-  display: none;
+  background: rgba(15, 17, 23, 0.85);
+  border-radius: 6px;
 }
 
 .game-over__title {
-  font-size: 1.4rem;
-  font-weight: bold;
   margin: 0;
+  font-size: 24px;
+  font-weight: 700;
+  color: #ef4444;
 }
 
-.game-over__score {
-  margin: 0 0 8px;
-}
-
-#restart-btn {
-  padding: 8px 20px;
-  font-size: 1rem;
+.game-over__btn {
+  margin-top: 8px;
+  padding: 10px 20px;
   border: none;
-  border-radius: 4px;
-  background: #4ade80;
-  color: #0f1115;
-  font-weight: bold;
+  border-radius: 6px;
+  background: #22c55e;
+  color: #0f1117;
+  font-size: 16px;
+  font-weight: 600;
   cursor: pointer;
 }
 
-#restart-btn:hover {
-  background: #22c55e;
+.game-over__btn:hover {
+  background: #4ade80;
+}
+
+.hidden {
+  display: none;
 }
